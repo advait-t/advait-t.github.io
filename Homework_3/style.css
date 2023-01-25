@@ -1,5 +1,5 @@
-.heading_grid{
-    width: 520px;
+.heading_bar{
+    width: 545px;
     height: 100px;
     display: grid;
     border-color: black;
@@ -13,7 +13,7 @@
     align-items: center;
 }
 
-.heading{
+.heading {
     font-family: Georgia, 'Times New Roman', Times, serif;
     text-align: center;
     font-size: 40px; 
@@ -47,7 +47,7 @@
     font-family: Georgia, 'Times New Roman', Times, serif;
     font-size: 20px;
     text-decoration: none;
-    padding-top: 50px;
+    padding-top: 55px;
     color: black;
     margin: auto;
 }
@@ -100,15 +100,16 @@
 
 .copyright_in_footer {
     font-family: Georgia, 'Times New Roman', Times, serif;
-    padding-top: 40px;
+    padding-top: 30px;
     font-size: 10px;
 }
 
 .footer_image {
-    width: 15px;
-    height: 15px;
+    width: 19px;
+    height: 19px;
     align-items: center;
-    padding: 12px;
+    padding: 8px;
+    padding-top: 20px;
 }
 
 .image_grid_home1 {
@@ -119,7 +120,7 @@
     text-align: center;
     align-items: center;
     margin: auto;
-    padding-top: 80px;
+    padding-top: 77px;
 }
 
 .image_grid_home2 {
