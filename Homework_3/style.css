@@ -1,9 +1,11 @@
+/* To create an overall container */
 .overall_contain {
     margin-left: auto;
     margin-right: auto;
     width: 610px;
 }
 
+/* To create the heading bar */
 .heading_bar{
     width: 545px;
     height: 100px;
@@ -13,12 +15,12 @@
     border-width: 1px;
     display: grid;
     margin-top: 35px;
-    /* margin-bottom: auto; */
     margin-left: auto;
     margin-right: auto;
     align-items: center;
 }
 
+/* TO write the heading */
 .heading {
     font-family: Georgia, 'Times New Roman', Times, serif;
     text-align: center;
@@ -26,14 +28,15 @@
     font-style: normal; 
     font-variant: normal;
     font-weight: lighter; 
-    /* line-height: 26.4px; */
 }
 
+/* Defining the navigation bar */
 .navigation_bar {
     text-align: center;
     margin-top: -20px;
 }
 
+/* defining the navigation bar text */
 .navigation_bar a{
     color: grey;
     font-family: Georgia, 'Times New Roman', Times, serif;
@@ -44,10 +47,12 @@
     
 }
 
+/* Setting hover properties in navigation bar options */
 .navigation_bar a:hover{
     color: black;
 }
 
+/* for nature text */
 .nature_tag {
     display: grid;
     font-family: Georgia, 'Times New Roman', Times, serif;
@@ -58,6 +63,7 @@
     margin: auto;
 }
 
+/* Creating the grid for nature text */
 .nature_tag_grid {
     width: 610px;
     display: grid;
@@ -68,6 +74,7 @@
     margin: auto;
 }
 
+/* Creating 1st grid for the image */
 .image_grid_nature1 {
     width: 610px;
     display: grid;
@@ -79,6 +86,7 @@
     padding-top: 5px;
 }
 
+/* Creating the 2nd grid for the image */
 .image_grid_nature2 {
     width: 610px;
     display: grid;
@@ -89,6 +97,7 @@
     margin: auto;
 }
 
+/* Defining the images in the grids */
 .image_in_grid {
     width: 300px;
     height: 300px;
@@ -99,18 +108,21 @@
     padding-bottom: 2px;
 }
 
+/* Setting the footer */
 .footer {
     margin-left: auto;
     margin-right: auto;
     text-align: center;;
 }
 
+/* Copyright sign in the footer */
 .copyright_in_footer {
     font-family: Georgia, 'Times New Roman', Times, serif;
     padding-top: 30px;
     font-size: 10px;
 }
 
+/* Images used in the footer */
 .footer_image {
     width: 19px;
     height: 19px;
@@ -119,6 +131,7 @@
     padding-top: 25px;
 }
 
+/* Setting the propertes for images in the home page */
 .image_grid_home1 {
     width: 610px;
     display: grid;
@@ -130,6 +143,7 @@
     padding-top: 77px;
 }
 
+/* Setting the propertes for images in the home page */
 .image_grid_home2 {
     width: 610px;
     display: grid;
