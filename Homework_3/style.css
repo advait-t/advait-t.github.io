@@ -76,6 +76,7 @@
     text-align: center;
     align-items: center;
     margin: auto;
+    padding-top: 5px;
 }
 
 .image_grid_nature2 {
@@ -115,7 +116,7 @@
     height: 19px;
     align-items: center;
     padding: 8px;
-    padding-top: 20px;
+    padding-top: 25px;
 }
 
 .image_grid_home1 {
