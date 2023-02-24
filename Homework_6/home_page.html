@@ -1,0 +1,421 @@
+<HTML>
+    <head>
+        <title>Events Search</title>
+        <link rel="stylesheet" href="../static/style_home.css">
+    </head>
+    
+    <body>
+        <div class = 'form_container'>
+            <div class = 'heading'>
+                <a>Events Search</a>
+                <hr>
+            </div>
+            <form class = 'form_details' id = 'event_form'>
+    
+                <label for="keyword" class="keyword">
+                    Keyword
+                </label>
+                <input type="text" id="keyword" name = 'keyword' required class="keyword_input">
+                
+                <div class = 'distance_category_grid'>
+    
+                    <label for="distance" class="distance">
+                        Distance (miles)
+                    </label>
+    
+                    <label for="category" class = 'category'>
+                        Category
+                    </label>
+    
+                    <input type='number' id="distance" name = 'distance' placeholder=10 class = "distance_input">
+    
+                    <select id="category" name="category" required class = 'category_input'>
+                        <option value="default">Default</option>
+                        <option value="music">Music</option>
+                        <option value="sports">Sports</option>
+                        <option value="art">Art</option>
+                        <option value="film">Film</option>
+                        <option value="miscellaneous">Miscellaneous</option>
+                    </select>
+                </div>
+    
+                <label for="location" class = 'location'>
+                    Location
+                </label>
+                <input type="checkbox" id="auto_detect" name="auto_detect" value="auto_detect">
+                <label for="auto_detect" class = 'auto_detect'>Auto-Detect Location</label><br><br>
+    
+                <input type="text" id="location" name = 'location' class = 'location_input' required><br><br>
+    
+                <button id = 'submit_button' class = 'search_button'>Search</button>
+                <button id = 'reset_button' class = 'clear_button'>Clear</button>
+            </form>
+        </div>
+        <div class = 'results'>
+            <table id = 'table'>
+                <tr>
+                    <th>Date</th>
+                    <th>Icon</th>
+                    <th onclick="sort_table(2)">Event</th>
+                    <th onclick="sort_table(3)">Genre</th>
+                    <th onclick="sort_table(4)">Venue</th>
+                </tr>
+            </table>
+        </div>
+        
+        <div class = 'no_results_found'>No Records found</div>
+    
+        <div class = 'event_details_container'>
+            <div class = 'event_heading_container'></div>
+            <div class = 'event_info_map_grid'>
+                <div class = 'event_info_container'>
+                    <div class = 'data_container'></div>
+                </div>
+                <div class = 'event_map_container'></div>
+            </div>
+        </div>
+    
+        <div class = 'venue_information_text'>Show Venue Details</div>
+        <div class = 'venue_information_button'></div>
+    
+        <div class = 'venue_details_card'>
+            <div class = 'venue_heading'></div>
+            <div class = 'venue_logo'></div>
+            <div class = 'venue_address_all'>
+                <div class = 'venue_address'></div>
+                <div class = 'venue_full_address'></div>
+                <div class = 'google_map'></div>
+            </div>
+            
+            <div class = 'venue_details'></div>
+        </div>
+    </body>
+    
+    
+<script>
+    document.getElementById("auto_detect").addEventListener("click", function(){
+        if (this.checked) {
+            document.getElementById('location').style.display = "none";
+            document.getElementsByClassName('form_container')[0].style.height = "325px";
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "https://ipinfo.io/json?token=a401cd8851256a", true);
+            xhr.send();
+            xhr.onreadystatechange = processRequest;
+            xhr.addEventListener("readystatechange", processRequest, false);
+            function processRequest(e) {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var response = JSON.parse(xhr.responseText);
+                    var location = response.loc;
+                    document.getElementById("location").value = location;
+                }
+            }
+        }
+
+        else {
+            document.getElementById('location').style.display = "block";
+            document.getElementsByClassName('form_container')[0].style.height = "350px";
+            document.getElementById("location").value = "";
+        }
+    });
+
+    document.getElementById("reset_button").addEventListener("click", function(p){
+        document.getElementById("event_form").reset();
+        document.getElementsByClassName('form_container')[0].style.height = "350px";
+        document.getElementById('location').style.display = "block";
+        document.getElementById("auto_detect").checked = false;
+        
+        document.getElementsByClassName('results')[0].style.display = "none";
+        var table = document.getElementById("table");
+        var rowCount = table.rows.length;
+        for (var i=rowCount-1; i>0; i--) {
+            table.deleteRow(i);
+        }
+
+        document.getElementsByClassName('event_details_container')[0].style.display = "none";
+        document.getElementsByClassName('venue_information_text')[0].style.display = "none";
+        document.getElementsByClassName('venue_information_button')[0].style.display = "none";
+        document.getElementsByClassName('venue_details_card')[0].style.display = "none";
+        document.getElementsByClassName('no_results_found')[0].style.display = "none";
+
+        p.preventDefault();
+
+    });
+
+    document.getElementById("submit_button").addEventListener("click", function(p){
+        if (document.getElementById("keyword").value == "" || document.getElementById("keyword").value == null || document.getElementById("location").value == "" || document.getElementById("location").value == null) {
+            document.getElementById("keyword").required = true;
+
+            if (document.getElementById("auto_detect").checked == false) {
+                document.getElementById("location").required = true;
+            }
+        }
+
+        else {
+            p.preventDefault();
+            var keyword_input = document.getElementById("keyword").value;
+            var distance_input = document.getElementById("distance").value;
+            var category_input = document.getElementById("category").value;
+            var location_input = document.getElementById("location").value;
+
+            document.getElementsByClassName('event_details_container')[0].style.display = "none";
+            document.getElementsByClassName('venue_information_text')[0].style.display = "none";
+            document.getElementsByClassName('venue_information_button')[0].style.display = "none";
+            document.getElementsByClassName('venue_details_card')[0].style.display = "none";
+
+            
+    
+            fetch( "https://web-tech-377503.nn.r.appspot.com/data_table?keyword=" + keyword_input + "&distance=" + distance_input + "&category=" + category_input + "&location=" + location_input)
+            .then(response => response.json())
+            .then(data =>{
+
+                document.getElementsByClassName('results')[0].style.display = "block";
+                var table1 = document.getElementById("table");
+                var rowCount = table.rows.length;
+                for (var i=rowCount-1; i>0; i--) {
+                    table.deleteRow(i);
+                }
+    
+                if (data.length == 0) {
+                    document.getElementsByClassName('no_results_found')[0].scrollIntoView();
+                    document.getElementsByClassName('no_results_found')[0].style.display = "block";
+                    document.getElementsByClassName('results')[0].style.display = "none";
+                    return false;
+                }
+    
+                document.getElementsByClassName('no_results_found')[0].style.display = "none";
+    
+                document.getElementsByClassName('results')[0].scrollIntoView();
+    
+                for (var i=0; i<data.length; i++) {
+                    var row = table1.insertRow(-1);
+                    var date = row.insertCell(0);
+                    var icon = row.insertCell(1);
+                    var event = row.insertCell(2);
+                    var genre = row.insertCell(3);
+                    var venue = row.insertCell(4);
+                    date.innerHTML = data[i].date;
+                    date.innerHTML += "<br>";
+                    date.innerHTML += data[i].time;
+                    icon.innerHTML = "<img src=" + data[i].image + " width='88.5' height = '50'>";
+                    event.innerHTML = "<a onclick = details('" + data[i].event_id + "');  id = '" + data[i].event_id + "' class = 'event_name'>" + data[i].name + "</a>";
+                    event.onmouseover = function() {
+                        this.style.color = "blue";
+                    }
+                    event.onmouseout = function() {
+                        this.style.color = "black";
+                    }
+                    event.style.cursor = "pointer";
+                    genre.innerHTML = data[i].segment;
+                    venue.innerHTML = data[i].venue;
+
+                    document.getElementById("table").rows[0].style.boxShadow = "0px 2px 4px rgba(0, 0, 0, 0.4)";
+
+                }  
+            })
+        }
+        
+        });
+
+
+        // The code to sort the table was used from https://www.w3schools.com/howto/howto_js_sort_table.asp and modified to suit the needs of the Homework.
+        function sort_table(n) {
+            var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+            table = document.getElementById("table");
+            switching = true;
+            dir = "asc"; 
+            while (switching) {
+                switching = false;
+                rows = table.rows;
+                for (i = 1; i < (rows.length - 1); i++) {
+                shouldSwitch = false;
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+
+                if (dir == "asc") {
+                    if (x.innerText > y.innerText) {
+
+                    shouldSwitch = true;
+                    break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerText < y.innerText) {
+                    shouldSwitch = true;
+                    break;
+                    }
+                }
+                }
+                if (shouldSwitch) {
+
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                switchcount ++; 
+                } else {
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+                }
+            }
+            }
+
+
+        function details(event_id) {
+                fetch( "https://web-tech-377503.nn.r.appspot.com/eventdetails?eventid=" + event_id)
+                .then(response => response.json())
+                .then(data =>{
+                    document.getElementsByClassName('venue_details_card')[0].style.display = "none";
+                    document.getElementsByClassName('event_details_container')[0].style.display = "block";
+                    document.getElementsByClassName('event_heading_container')[0].innerHTML = data.name;
+
+                    document.getElementsByClassName('data_container')[0].innerHTML = "<div class = 'event_info'><div class = 'event_info_title'>Date</div><div class = 'event_info_data'>" + data.date+ ' ' + data.time + "</div></div>";
+
+                    if (data.artist != "") {
+                        document.getElementsByClassName('data_container')[0].innerHTML += "<div class = 'event_info'><div class = 'event_info_title'>Artist/Team</div><div class = 'event_info_data'><a href = '" + data.artist_url + "' target = '_blank' style = 'color: #5CC4FA; text-decoration: none;'>"+data.artist+"</a></div></div>";
+                    }
+                    if (data.venue != "") {
+                        document.getElementsByClassName('data_container')[0].innerHTML += "<div class = 'event_info'><div class = 'event_info_title'>Venue</div><div class = 'event_info_data_venue'>" + data.venue + "</div></div>";
+                        var venue_name_from_tag = document.getElementsByClassName('event_info_data_venue')[0].innerText;
+                    }
+
+                    if (data.segment != "" || data.genre != "" || data.subgenre != "" || data.subtype != "" || data.type != "" || data.segment != 'Undefined' || data.genre != 'Undefined' || data.subgenre != 'Undefined' || data.subtype != 'Undefined' || data.type != 'Undefined') {
+                        var genres_full = "";
+                        if (data.segment != '' || data.segment != 'Undefined') {
+                            genres_full += data.segment;
+                        }
+                        if (data.genre != '' || data.genre != 'Undefined') {
+                            genres_full += " | " + data.genre;
+                        }
+                        if (data.subgenre != ''|| data.subgenre != 'Undefined') {
+                            genres_full += " | " + data.subgenre;
+                        }
+                        if (data.subtype != ''|| data.subtype != 'Undefined') {
+                            genres_full += " | " + data.subtype;
+                        }
+                        if (data.type != "" || data.type != 'Undefined') {
+                            genres_full += " | " + data.type;
+                        }
+                        
+                        var genres_full = genres_full.replace(/\| Undefined/g, "");
+                        document.getElementsByClassName('data_container')[0].innerHTML += "<div class = 'event_info'><div class = 'event_info_title'>Genres</div><div class = 'event_info_data'>" + genres_full + "</div></div>";
+                    }
+                    if (data.priceMin != "" && data.priceMax != "") {
+                        document.getElementsByClassName('data_container')[0].innerHTML += "<div class = 'event_info'><div class = 'event_info_title'>Price Ranges</div><div class = 'event_info_data'>" + data.priceMin + " - " + data.priceMax + "</div></div>";
+                    }
+                    if (data.status != "") {
+                        if (data.status == "onsale") {
+                            document.getElementsByClassName('data_container')[0].innerHTML += "<div class='event_info'><div class='event_info_title'>Ticket Status</div><div class='event_info_data' style='background-color: green; display: inline-block; border-radius: 7px; padding: 5px;'>On Sale</div></div>";
+
+                        }
+                        else if (data.status == "cancelled") {
+                            document.getElementsByClassName('data_container')[0].innerHTML += "<div class='event_info'><div class='event_info_title'>Ticket Status</div><div class='event_info_data' style='background-color: black; display: inline-block; border-radius: 7px; padding: 5px;'>Cancelled</div></div>";
+                        }
+                        else if (data.status == "offsale") {
+                            document.getElementsByClassName('data_container')[0].innerHTML += "<div class='event_info'><div class='event_info_title'>Ticket Status</div><div class='event_info_data' style='background-color: red; display: inline-block; border-radius: 7px; padding: 5px;'>Off Sale</div></div>";
+                        }
+                        else if (data.status == "postponed") {
+                            document.getElementsByClassName('data_container')[0].innerHTML += "<div class='event_info'><div class='event_info_title'>Ticket Status</div><div class='event_info_data' style='background-color: orange; display: inline-block; border-radius: 7px; padding: 5px;'>Postponed</div></div>";
+                        }
+                        else if (data.status == "rescheduled") {
+                            document.getElementsByClassName('data_container')[0].innerHTML += "<div class='event_info'><div class='event_info_title'>Ticket Status</div><div class='event_info_data' style='background-color: orange; display: inline-block; border-radius: 7px; padding: 5px;'>Rescheduled</div></div>";
+                        }
+                        else {
+                            document.getElementsByClassName('data_container')[0].innerHTML += "<div class = 'event_info'><div class = 'event_info_title'>Ticket Status</div><div class = 'event_info_data'>" + data.status + "</div></div>";
+                        }
+                    }
+                    if (data.buy_tickets != "") {
+                        document.getElementsByClassName('data_container')[0].innerHTML += "<div class = 'event_info'><div class = 'event_info_title'>Buy Ticket At</div><div class = 'event_info_data'><a href = '" + data.buy_ticket_at + "' target = '_blank' style = 'color: #5CC4FA; text-decoration: none;'>Ticketmaster</a></div></div>";
+                    }
+                    
+
+                    var container = document.getElementsByClassName('event_map_container')[0];
+                    var img = new Image();
+                    img.onload = function() {
+                    container.innerHTML = "<img src='" + data.seatmap + "' width='100%' height='100%' style='object-fit: cover;'>";
+                    };
+                    img.onerror = function() {
+                    container.innerHTML = "";
+                    };
+                    img.src = data.seatmap;
+
+                    document.getElementsByClassName('venue_information_text')[0].style.display = "block";
+                    document.getElementsByClassName('venue_information_button')[0].style.display = "block";
+                    document.getElementsByClassName('venue_information_button')[0].scrollIntoView({behavior: "smooth"});
+                    document.getElementsByClassName('venue_information_button')[0].style.cursor = "pointer";
+
+                    document.getElementsByClassName('venue_information_button')[0].addEventListener('click', function() {
+                        venue_info(venue_name_from_tag);
+                    })
+                })
+            };
+
+        function venue_info(venue) {
+                fetch( "https://web-tech-377503.nn.r.appspot.com/venuedetails?venuename=" + venue)
+                .then(response => response.json())
+                .then(data1 => {
+
+                    document.getElementsByClassName('venue_information_text')[0].style.display = "none";
+                    document.getElementsByClassName('venue_information_button')[0].style.display = "none";
+
+                    document.getElementsByClassName('venue_details_card')[0].style.display = "block";
+                    document.getElementsByClassName('venue_details_card')[0].scrollIntoView({behavior: "smooth"});
+                    document.getElementsByClassName('venue_heading')[0].innerHTML = data1.name;
+                    document.getElementsByClassName('venue_heading')[0].style.paddingTop = "20px";
+                    document.getElementsByClassName('venue_heading')[0].style.textDecoration = "underline";
+                    document.getElementsByClassName('venue_heading')[0].style.textDecorationColor = "black";
+                    document.getElementsByClassName('venue_heading')[0].style.textDecorationThickness = "1px";
+
+                    document.getElementsByClassName('venue_logo')[0].style.display = "block";
+                    var img_container = document.getElementsByClassName('venue_logo')[0];
+                    var img = new Image();
+                    img.onload = function() {
+
+                    img_container.innerHTML = "<img src='" + data1.venue_image + "' width='100px' height='60px' >";
+
+                    };
+                    img.onerror = function() {
+                    img_container.innerHTML = "";
+                    };
+                    img.src = data1.venue_image;
+
+                    document.getElementsByClassName('venue_logo')[0].innerHTML = "<img src = '" + data1.venue_image + ">";
+                    document.getElementsByClassName('venue_logo')[0].style.marginLeft = "auto";
+                    document.getElementsByClassName('venue_logo')[0].style.marginRight = "auto";
+
+
+                    document.getElementsByClassName('venue_address_all')[0].style.display = "block";
+                    document.getElementsByClassName('venue_address_all')[0].style.width = "50%";
+                    document.getElementsByClassName('venue_address_all')[0].style.float = "left";
+
+                    document.getElementsByClassName('venue_address')[0].innerHTML = "";
+                    document.getElementsByClassName('venue_address')[0].style.display = "block";
+                    document.getElementsByClassName('venue_address')[0].style.width = "50%";
+                    document.getElementsByClassName('venue_address')[0].style.float = "left";   
+                    document.getElementsByClassName('venue_address')[0].style.paddingTop = "40px";
+                    document.getElementsByClassName('venue_address')[0].style.textAlign = "right";
+                    document.getElementsByClassName('venue_address')[0].style.marginLeft = "-20px";
+                    document.getElementsByClassName('venue_address')[0].innerHTML += "<div class = 'venue_address_line'><b>Address:</b></div>";
+
+                    document.getElementsByClassName('venue_full_address')[0].innerHTML = "";
+                    document.getElementsByClassName('venue_full_address')[0].style.display = "block";
+                    document.getElementsByClassName('venue_full_address')[0].style.width = "50%";
+                    document.getElementsByClassName('venue_full_address')[0].style.float = "left";
+                    document.getElementsByClassName('venue_full_address')[0].style.paddingTop = "40px";
+                    document.getElementsByClassName('venue_full_address')[0].style.textAlign = "left";
+                    document.getElementsByClassName('venue_full_address')[0].style.marginLeft = "10px";
+                    document.getElementsByClassName('venue_full_address')[0].innerHTML += "<div class = 'venue_address_line'>"+data1.address+"</div>";
+                    document.getElementsByClassName('venue_full_address')[0].innerHTML += "<div class = 'venue_address_line'>"+data1.city+","+data1.state+"</div>";
+                    document.getElementsByClassName('venue_full_address')[0].innerHTML += "<div class = 'venue_address_line'>"+data1.postalCode+"</div>";
+
+                    document.getElementsByClassName('google_map')[0].innerHTML = "";
+                    document.getElementsByClassName('google_map')[0].style.display = "block";
+                    document.getElementsByClassName('google_map')[0].innerHTML += "<a href = '" + data1.google_maps_url + "' target = '_blank' style = 'color: teal; text-decoration: none;'>Open in Google Maps</a>";
+
+                    document.getElementsByClassName('venue_details')[0].innerHTML = "";
+                    document.getElementsByClassName('venue_details')[0].style.display = "block";
+                    document.getElementsByClassName('venue_details')[0].innerHTML += "<a href = '" + data1.url + "' target = '_blank' style = 'color: teal; text-decoration: none;'>More events at this venue</a>";
+
+                })
+            };
+
+</script>
+</HTML>
