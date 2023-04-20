@@ -1,0 +1,23 @@
+/* .navbar-light .navbar-nav .nav-link {
+    color: white;
+  }
+.navbar-light .navbar-nav .nav-link.active {
+border: 1px solid white;
+} */
+
+.nav-link.active .nav-link-btn {
+  outline: 2px solid white;
+}
+
+.nav-link-btn {
+  outline: none;
+}
+
+.active-link {
+  color: white;
+}
+
+
+.nav-link:hover .btn-outline-light {
+  background-color: transparent;
+}

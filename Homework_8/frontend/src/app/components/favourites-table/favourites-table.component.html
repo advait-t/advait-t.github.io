@@ -1,0 +1,49 @@
+<!-- <p>favourites-table works!</p> -->
+  <head>
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.15.3/css/all.css" integrity="87c47c29ae" crossorigin="anonymous">
+  </head>
+  
+  <div class="row" *ngIf="data.length!==0">
+    <div class="col-12">
+      <h3 class="text-center" style="font-size: medium; color: #9AFCE5; padding-bottom: 10px; align-items: center;">List of your Favourite Events</h3>
+    </div>
+  </div>
+  <div class="container" *ngIf="data.length!==0">
+    <table class="table table-light text-center" style="max-width: 800px; margin-left: auto; margin-right: auto; border-radius: 10px;">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Date</th>
+          <th>Event</th>
+          <th>Category</th>
+          <th>Venue</th>
+          <th>Favourite</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of data; let i=index">
+          <td>{{ i+1 }}</td>
+          <td>{{ event.date }}</td>
+          <td>{{ event.name }}</td>
+          <td>
+            <ng-container *ngIf="(event.genre || '') + '|' + (event.subgenre || '') + '|' + (event.segment || '') + '|' + (event.type || '') + '|' + (event.subtype || '') !== '|||||'">
+              {{ event.genre || '' }}{{ event.genre && event.subgenre ? ' | ' : '' }}{{ event.subgenre || '' }}{{ (event.genre || event.subgenre) && event.segment ? ' | ' : '' }}{{ event.segment || '' }}{{ (event.genre || event.subgenre || event.segment) && event.type ? ' | ' : '' }}{{ event.type || '' }}{{ (event.genre || event.subgenre || event.segment || event.type) && event.subtype ? ' | ' : '' }}{{ event.subtype || '' }}
+            </ng-container>
+          </td>
+          <td>{{ event.venue }}</td>
+          <td>
+            <i class="far fa-trash-alt" style="color: #000000;" (click)="removeFavourite(event.name)"></i>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+<div class="container" *ngIf="!data || data.length===0">
+<table class="table table-striped table-light text-center" style="max-width: 800px; margin-left: auto; margin-right: auto; border-radius: 10px; color: red;">
+    <thead>
+        <tr>No favourite events to show</tr>
+    </thead>
+</table>
+</div>

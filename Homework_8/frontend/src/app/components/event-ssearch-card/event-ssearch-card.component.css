@@ -1,0 +1,17 @@
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 20px;
+    color: white;
+  }
+
+.card {
+    background-color: rgba(255, 255, 255,0.15);
+    backdrop-filter: blur(7px);
+}
+
+.event_form {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 40px;
+}

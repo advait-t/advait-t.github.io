@@ -1,0 +1,26 @@
+  <div *ngIf="showtable" class="container">
+    <table class="table table-striped table-dark text-center" style="max-width: 800px; margin-left: auto; margin-right: auto; border-radius: 10px;">
+      <thead>
+        <tr>
+          <th>Date/Time</th>
+          <th>Icon</th>
+          <th>Event</th>
+          <th>Genre</th>
+          <th>Venue</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let event of events">
+          <td>{{ event.date + '\n' +event.time }}</td>
+          <td>
+            <img src="{{ event.icon }}" alt=" " class="custom-icon img-fluid" width="88.5" height="50">
+          </td>
+          <td (click)="clickEventName(event.event_id)">{{ event.name }}</td>
+          <td>{{ event.genre }}</td>
+          <td>{{ event.venue }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <app-details-card (showdetailsChange)="updatedetails($event)" (showtableChange)="updatetable($event)" [showdetails] = "showdetails" [event_details] = "event_details"  [artist_info]="artist_details" [venue_info] = "venue_information"></app-details-card>
