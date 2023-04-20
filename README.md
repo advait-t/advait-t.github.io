@@ -36,11 +36,11 @@
 You can view a live demo of the website at https://advait-12334123.uw.r.appspot.com
 ## Screenshots
 
-(https://user-images.githubusercontent.com/60815910/233255120-9b465cf5-ada9-4f45-b123-e82370e85d80.png)
-(https://user-images.githubusercontent.com/60815910/233255175-481ade0b-e27c-42cd-a6dc-def7b2f51d22.png)
-(https://user-images.githubusercontent.com/60815910/233255196-94f33986-b54b-4431-b90a-cb3c41b62fc2.png)
-(https://user-images.githubusercontent.com/60815910/233255252-39b965f7-7ad3-47c7-98d7-f758161bdc80.png)
-(https://user-images.githubusercontent.com/60815910/233255257-69725a0f-1e37-4aa0-a2de-cbc5419b52bd.png)
-(https://user-images.githubusercontent.com/60815910/233255258-7bb9265b-88e5-4f78-b4fc-9ee619db7b91.png)
+![SS1](https://user-images.githubusercontent.com/60815910/233255120-9b465cf5-ada9-4f45-b123-e82370e85d80.png)
+![SS2](https://user-images.githubusercontent.com/60815910/233255175-481ade0b-e27c-42cd-a6dc-def7b2f51d22.png)
+![SS3](https://user-images.githubusercontent.com/60815910/233255196-94f33986-b54b-4431-b90a-cb3c41b62fc2.png)
+![SS4](https://user-images.githubusercontent.com/60815910/233255252-39b965f7-7ad3-47c7-98d7-f758161bdc80.png)
+![SS5](https://user-images.githubusercontent.com/60815910/233255257-69725a0f-1e37-4aa0-a2de-cbc5419b52bd.png)
+![SS6](https://user-images.githubusercontent.com/60815910/233255258-7bb9265b-88e5-4f78-b4fc-9ee619db7b91.png)
 
 You can view a live demo of the website at https://advait-12334123.uw.r.appspot.com
